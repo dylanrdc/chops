@@ -62,7 +62,7 @@ def inspect_single_dicom():
 
         # 4. Preview your custom filename rule
         # Convention: UserID_Year_Breast_View.dcm
-        preferred_name = f"{clean_custom_id}_{year}_{breast}_{view}.dcm"
+        preferred_name = f"{clean_custom_id}_{formatted_date}_{breast}_{view}.dcm"
         
         print("\n" + "="*45)
         print("PREVIEW OF PREFERRED FILENAME CONVENTION:")
