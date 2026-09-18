@@ -77,6 +77,17 @@ def sort_and_rename_dicoms():
                 view = getattr(ds, "ViewPosition", "UNK-VIEW").strip()      # USUALLY CC or MLO
                 raw_date = getattr(ds, "StudyDate", "00000000").strip()     # Formatted date 
 
+                frames_attr = getattr(ds, "NumberofFrames", 1).strip()              # number of frames
+                try: 
+                    frames = int(frames_attr) if frames_attr is not None else 1
+                except (ValueError, TypeError):
+                    frames = 1
+
+                tomo_suffix = ""
+                if frames > 1:
+                    print(f"Detected Tomosynthesis for {file_path.name}")
+                    tomo_suffix = "_tomo"
+
                 # Clean up the date components
                 if len(raw_date) == 8 and raw_date.isdigit():
                     year = raw_date[0:4]
