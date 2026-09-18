@@ -52,7 +52,7 @@ def inspect_single_dicom():
         print(f"  • Full Study Date:            {formatted_date}")
         print("="*45)
 
-        # 3. Prompt user for a custom ID
+        # Prompt user for a custom ID
         custom_id = input("Enter the preferred User ID for this file: ").strip()
         
         # Sanitize the user input to remove characters illegal in file names
@@ -60,8 +60,8 @@ def inspect_single_dicom():
         if not clean_custom_id:
             clean_custom_id = "USER-ID-REQUIRED"
 
-        # 4. Preview your custom filename rule
-        # Convention: UserID_Year_Breast_View.dcm
+        # Preview your custom filename rule
+        # Convention: CleanCustomID_FormattedDate_Breast_View.dcm
         preferred_name = f"{clean_custom_id}_{formatted_date}_{breast}_{view}.dcm"
         
         print("\n" + "="*45)
