@@ -49,7 +49,7 @@ def inspect_single_dicom():
         print(f"  • Breast Laterality:          {breast} ({'Right' if breast == 'R' else 'Left' if breast == 'L' else 'Unknown'})")
         print(f"  • View Position:              {view}")
         print(f"  • Acquisition Year:           {year}")
-        print(f"  • Full Study Date:            {formatted_date}")
+        print(f"  • Formatted Date:            {formatted_date}")
         print("="*45)
 
         # Prompt user for a custom ID
