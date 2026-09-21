@@ -44,7 +44,9 @@ def sort_and_rename_dicoms():
                 if modality  !="MG":
                         skipped_non_mammo += 1
                         continue
-                                       
+
+                patient_name = str(getattr(ds, "PatientName", "UNK_NAME")).strip()
+                print(f"Patient Name (from DICOM): {patient_name}")
                 
                 # Fetch element values safely as strings
                 patient_id = str(getattr(ds, "PatientID", "UNK_PAT")).strip()
