@@ -5,13 +5,13 @@ import pydicom
 """
 
 
-Mammography NH3 Feature Inspector (managed by Cizz-l Lockhart)
-
+Mammography NH3 Feature Inspector (managed by @nhclo)
+written by @n2dyd
 
 """
 
 def sort_and_rename_dicoms():
-    print("\n\n=== Mammography Naming Feature Inspector (managed by Cizz-l Lockhart)===\n\n")
+    print("\n\n=== Mammography Naming Feature Inspector (managed by @nhclo) ===\n\n")
     
     # Prompt the user for the file path
     user_input = input("Enter the path to your DICOM directory: ").strip()
@@ -33,12 +33,18 @@ def sort_and_rename_dicoms():
     
     # Group files by Patient ID preallocation
     patient_groups = {}
-    
+    skipped_non_mammo = 0
+
     for file_path in dir_path.iterdir():
         if file_path.is_file():
             try:
                 # Read metadata, stopping before pixel data for speed
                 ds = pydicom.dcmread(file_path, stop_before_pixels=True)
+                modality = str(getattr(ds, "Modality", "")).strip().upper()
+                if modality  !="MG":
+                        skipped_non_mammo += 1
+                        continue
+                                       
                 
                 # Fetch element values safely as strings
                 patient_id = str(getattr(ds, "PatientID", "UNK_PAT")).strip()
@@ -52,9 +58,13 @@ def sort_and_rename_dicoms():
                 # Skipping non-DICOM files or unreadable files
                 continue
 
+    # Report if no valid DICOM files were found
     if not patient_groups:
         print("No valid DICOM files found in directory.")
         return
+
+    # Report the number of non-mammography files skipped
+    print(f"Skipped {skipped_non_mammo} non-mammography file(s) (Modality != 'MG').")
 
     sorted_patient_ids = sorted(patient_groups.keys())
     print(f"Found {len(patient_groups)} unique patient ID(s). Starting sorting and renaming process... \n")
@@ -96,7 +106,7 @@ def sort_and_rename_dicoms():
 
         for file_path, ds in patient_groups[pid]:
             # --- 1. Robust Breast Laterality Check ---
-            breast = str(getattr(ds, "ImageLaterality", getattr(ds, "FrameLaterality", ""))).strip()
+            breast = str(getattr(ds, "ImageLaterality", "") or getattr(ds, "FrameLaterality", "") or getattr(ds, "Laterality", "")).strip()
             
             # Fallback to Segmented or Sequence-based laterality if root is missing
             if not breast or breast.lower() == "none" or breast == "":
