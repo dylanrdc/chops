@@ -44,9 +44,6 @@ def sort_and_rename_dicoms():
                 if modality  !="MG":
                         skipped_non_mammo += 1
                         continue
-
-                patient_name = str(getattr(ds, "PatientName", "UNK_NAME")).strip()
-                print(f"Patient Name (from DICOM): {patient_name}")
                 
                 # Fetch element values safely as strings
                 patient_id = str(getattr(ds, "PatientID", "UNK_PAT")).strip()
@@ -59,6 +56,7 @@ def sort_and_rename_dicoms():
             except (pydicom.errors.InvalidDicomError, PermissionError):
                 # Skipping non-DICOM files or unreadable files
                 continue
+
 
     # Report if no valid DICOM files were found
     if not patient_groups:
@@ -75,6 +73,8 @@ def sort_and_rename_dicoms():
         print("\n" + "="*55)
         print(f"PATIENT {idx}/{len(sorted_patient_ids)}: Original Patient ID -> '{pid}'")
         print(f"Contains {len(patient_groups[pid])} files")
+        patient_name = str(getattr(patient_groups[pid][0][1], "PatientName", "UNK_NAME")).strip()
+        print(f"Patient Name (from DICOM): {patient_name}")
         print("="*55)
         
         # Prompt user for a custom ID for this specific patient group
