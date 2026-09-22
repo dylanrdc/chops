@@ -187,8 +187,8 @@ def sort_and_rename_dicoms():
             # Route to the appropriate folder structure
             if is_unknown:
                 tomo_type_folder = "TOMO" if frames > 1 else "NON-TOMO"
-                output_folder = standard_output_folder / "UNK_PATIENTS" / tomo_type_folder
-                current_folder_log_name = f"UNK_PATIENTS/{tomo_type_folder}"
+                output_folder = standard_output_folder / "NEEDS_REVIEW" / tomo_type_folder
+                current_folder_log_name = f"NEEDS_REVIEW/{tomo_type_folder}"
             else:
                 output_folder = standard_output_folder
                 current_folder_log_name = standard_folder_name
