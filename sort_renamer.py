@@ -2,8 +2,9 @@ import os
 import shutil
 from pathlib import Path
 import pydicom
-"""
+import csv
 
+"""
 
 Mammography NH3 Feature Inspector (managed by @nhclo)
 written by @n2dyd
@@ -11,7 +12,7 @@ written by @n2dyd
 """
 
 def sort_and_rename_dicoms():
-    print("\n\n=== Mammography Naming Feature Inspector (managed by @nhclo) ===\n\n")
+    print("\n\n=== Mammography Naming Feature Inspector (managed by @nhclo) ===\n Ensure you use git pull before running this script.\n")
     
     # Prompt the user for the file path
     user_input = input("Enter the path to your DICOM directory: ").strip()
@@ -125,7 +126,7 @@ def sort_and_rename_dicoms():
 
             if not breast or breast.lower() == "none" or breast == "":
                 breast = "UNK-SIDE"
-                
+
             # --- 2. Robust View Position & Code Meaning Check ---
             view = str(getattr(ds, "ViewPosition", "")).strip()
             
@@ -217,6 +218,14 @@ def sort_and_rename_dicoms():
                 print(f" → Organized (Copied): {file_path.name} -> {current_folder_log_name}/{preferred_name}")
             except Exception as e:
                 print(f" × Error copying file {file_path.name}: {e}")
+
+    # --- Export every filename in the folder to a horizontal CSV ---
+    all_filenames = [fp.name for group in patient_groups.values() for fp, ds in group]
+    csv_path = dir_path / "patientid_file_list.csv"
+    with open(csv_path, "w", newline="") as f:
+        writer = csv.writer(f)
+        writer.writerow(all_filenames)  # one row, one column per filename
+    print(f"\nWrote {len(all_filenames)} filenames to {csv_path}")
 
     print("\nSorting and renaming process complete!")
 
