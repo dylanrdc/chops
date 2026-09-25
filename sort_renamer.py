@@ -3,7 +3,8 @@ import shutil
 from pathlib import Path
 import pydicom
 import csv
-
+import customtkinter as ctk
+from GUI import PathSelectorApp
 """
 
 Mammography NH3 Feature Inspector (managed by @nhclo)
@@ -12,10 +13,11 @@ written by @n2dyd
 """
 
 def sort_and_rename_dicoms():
-    print("\n\n=== Mammography Naming Feature Inspector (managed by @nhclo) ===\n Ensure you use git pull before running this script.\n")
+    print("\n\n=== Mammography Naming Feature Inspector (managed by @nhclo) ===\n\n Ensure you use git pull before running this script.\n")
     
-    # Prompt the user for the file path
-    user_input = input("Enter the path to your DICOM directory: ").strip()
+    gui = PathSelectorApp()
+    gui.mainloop()
+    user_input = gui.path_entry.get()
     
     # Remove surrounding quotes (if the user dragged and dropped the folder into the terminal)
     user_input = user_input.strip("'\"")
@@ -229,5 +231,6 @@ def sort_and_rename_dicoms():
 
     print("\nSorting and renaming process complete!")
 
+# Option B: Random integers between a range (e.g., 1 to 100)
 if __name__ == "__main__":
     sort_and_rename_dicoms()
